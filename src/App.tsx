@@ -1,10 +1,12 @@
-import {useState} from 'react'
+import {useRef, useState} from 'react'
 import logo from './logo.svg'
 import './App.css'
 import Editor from "@monaco-editor/react";
 
 function App() {
   const [count, setCount] = useState(0)
+
+  const editorRef = useRef(null);
 
   function handleEditorChange(value, event) {
     // here is the current value
@@ -14,6 +16,8 @@ function App() {
   function handleEditorDidMount(editor, monaco) {
     console.log("onMount: the editor instance:", editor);
     console.log("onMount: the monaco instance:", monaco)
+
+    editorRef.current = editor;
   }
 
   function handleEditorWillMount(monaco) {
@@ -24,6 +28,10 @@ function App() {
     // model markers
     console.log("markers", markers)
     markers.forEach(marker => console.log('onValidate:', marker.message));
+  }
+
+  function showValue() {
+    alert(editorRef.current.getValue());
   }
 
   return (
@@ -59,6 +67,8 @@ function App() {
             </a>
           </p>
         </header>
+
+        <button onClick={showValue}>Show value</button>
 
         <Editor
             height="90vh"
